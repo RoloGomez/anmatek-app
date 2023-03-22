@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-icon slot="start" name="chevron-back-outline" [routerLink]="'/'"></ion-icon>
+    <ion-title>Leer Codigo qr</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  [scrollY]="false" [fullscreen]="true" class="camara">
+  <ion-content [style.visibility]="content_visibility" [scrollY]="false">
+    <div>
+      <ion-title>[Pulse Empezar Escaner]</ion-title>
+    </div>
+  </ion-content>
+  <div class="buttons ion-padding">
+    <ion-button expand="full" (click)="escanear()" *ngIf="escaneando==false">Empezar Escaner</ion-button>
+    <ion-button expand="full" color="danger" (click)="stopScan()" [hidden]="!escaneando">Dejar de Escanear</ion-button>
+  </div>
+  
+</ion-content>

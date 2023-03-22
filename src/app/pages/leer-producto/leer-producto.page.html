@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Información producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <div *ngFor="let i of producto | async">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Nombre: 
+          <ion-input placeholder="ejemplo: Bateria lenovo..." [(ngModel)]="i.nombre" [disabled]="modificar"></ion-input>
+        </ion-card-title>
+
+        <ion-card-title>
+          Cantidad 
+          <ion-input placeholder="Nombre de producto" [(ngModel)]="i.cantidad" [disabled]="modificar"></ion-input>
+        </ion-card-title>
+
+        <ion-card-title>
+          Precio de venta: 
+          <ion-input [(ngModel)]="i.precioVenta" [disabled]="modificar"></ion-input>
+        </ion-card-title>
+
+        <ion-card-title>
+          Precio de compra: 
+          <ion-input [(ngModel)]="i.precioCompra" [disabled]="modificar"></ion-input>
+        </ion-card-title>
+        
+      </ion-card-header>
+
+      <ion-card-content>
+        *Para habilitar los campos de edición presione "Modificar"
+      </ion-card-content>
+    </ion-card>
+
+    <div>
+      <div class="buttons">
+        <ion-button class="square-button" color="warning" [hidden]="!modificar" (click)="modificarProducto()">
+          Modificar
+        </ion-button>
+  
+        <ion-button class="square-button" color="success" [hidden]="modificar" (click)="guardarProducto(i.id, i.nombre, i.cantidad, i.precioCompra, i.precioVenta)">
+          Guardar cambios
+        </ion-button>
+  
+        <ion-button class="square-button" color="danger" [hidden]="modificar" (click)="modificarProducto()">
+          Cancelar
+        </ion-button>
+  
+        <ion-button class="square-button" color="danger" [hidden]="!modificar || rolTecnico == 'tecnico'" (click)="eliminar(i.id)">
+          Eliminar
+        </ion-button>
+  
+        <ion-button class="add-circle" color="success" (click)="clear()">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  
+</ion-content>

@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>informe cuentas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="cargarPDF()"><ion-icon name="print-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Pulse el icono '<ion-icon name="print-outline"></ion-icon>'' para generar un PDF.</ion-label>
+  </ion-item>
+  <div id="content2">
+    <h2>Informe de Cuentas</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <h4>Total en atenciones</h4>
+          <h4><div style="font-weight: bold;">${{total | number: '2.'}}</div></h4>
+        </ion-col>
+        <ion-col>
+          <h4>Avalúo de inventario</h4>
+          <h4><div style="font-weight: bold;">${{totalPro | number: '2.'}}</div></h4>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <h4 class="padding-h10">Lista ordenes</h4>
+    <ion-list class="ion-no-margin ion-no-padding" *ngFor="let orden of ordenes">
+      <div style="background-color:white; color:black; border-bottom: 1px solid silver;">
+        <ion-list-header>{{orden.emision}} {{orden.equipo}}</ion-list-header>
+        <ion-label class="ion-padding">Total ${{orden.valor | number: '2.'}}</ion-label>
+      </div>
+    </ion-list>
+    <h4 class="padding-h10">Productos en inventario</h4>
+    <ion-list class="ion-no-margin ion-no-padding" *ngFor="let producto of productos">
+      <div style="background-color:white; color:black; border-bottom: 1px solid silver;">
+        <ion-list-header>{{producto.nombre}}, stock:{{producto.cantidad}}</ion-list-header>
+        <ion-label class="ion-padding">Precio de venta: ${{producto.precioVenta | number: '2.'}} </ion-label>
+      </div>
+    </ion-list>
+  </div>
+  <div class="buttons">
+    <ion-button class="add-circle" (click)="clear()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+  </div>
+</ion-content>

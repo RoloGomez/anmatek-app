@@ -1,0 +1,30 @@
+ion-content {
+    --background: #ffffff;
+}
+h2{
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+h4, .texto-negro{
+    color: black;
+}
+.centrar-texto{
+    text-align: center;
+    font-weight: bold;
+}
+.center {
+    background-color: white;
+    width: 100px !important;
+}
+ion-card {
+    border: 1px solid black;
+    --background: rgba(255, 255, 255, 0);
+}
+ion-list {
+    --background: white;
+}
+ion-list-header, ion-label {
+    --color: black;
+    --background: white;
+}

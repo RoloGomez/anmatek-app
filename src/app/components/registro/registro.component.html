@@ -1,0 +1,29 @@
+<ion-content scrollY="false">
+    <ion-content scrollY="false">
+    <ion-list class="margin-10x">
+        <ion-label>Rut (Sin punto ni guion)</ion-label>
+        <ion-input placeholder="ejemplo: 123456780" [(ngModel)]="rut"></ion-input>
+
+        <ion-label>Nombre</ion-label>
+        <ion-input placeholder="Ingrese Nombre..." [(ngModel)]="nombre"></ion-input>
+
+        <ion-label>telefono</ion-label>
+        <ion-input placeholder="ejemplo: 912345678" [(ngModel)]="numero"></ion-input>
+
+        <ion-label >correo</ion-label>
+        <ion-input placeholder="ejemplo: correo@gmail.com" [(ngModel)]="correo"></ion-input>
+    </ion-list>
+    </ion-content>
+
+    <div>
+    <div class="buttons">
+        <ion-button class="add-circle" (click)="crearTecnico()">
+        <ion-icon slot="icon-only" color="success" name="checkmark-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button class="add-circle" (click)="clear()">
+        <ion-icon slot="icon-only" color="danger" name="close-outline"></ion-icon>
+        </ion-button>
+    </div>
+    </div>
+</ion-content>

@@ -1,0 +1,46 @@
+<ion-content [scrollY]="false" [fullscreen]="true" class="background-alter">
+  <div class="container">
+    <div class="header-login ion-padding">
+      <img class="center" src="../../assets/icon/Anmatek-logo.png"/>
+    </div>
+    <div class="body-login ion-padding">
+      <ion-card class="ion-no-margin">
+        <ion-card-header>
+          <ion-title class="ion-no-padding">
+            Iniciar Sesion
+          </ion-title>
+        </ion-card-header>
+  
+        <ion-card-content class="ion-no-padding ion-padding-horizontal">
+          <ion-item class="ion-valid ion-no-padding">
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input type="email" placeholder="correo@dominio.com" ngModel email [(ngModel)]="correo"></ion-input>
+            <ion-note slot="helper">Ingrese un correo valido</ion-note>
+            <ion-note slot="error">Correo invalido</ion-note>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input placeholder="Contraseña (8-16)" type="password" maxlength="16" [(ngModel)]="contrasena"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="error">
+            <ion-label color="danger">El correo o la Contraseña son incorrectos</ion-label>
+          </ion-item>
+          <ion-button fill="block" [disabled]="!(correo!='' && contrasena.length>=8)" (click)="iniciarSesion()">Entrar</ion-button>
+
+          <br>
+          <ion-label class="center" [hidden]="true">¿Olvido su contraseña?</ion-label>
+          <ion-button fill="block" [hidden]="true">Recuperar contraseña</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    
+    <div class="footer-login">
+      
+    </div>
+  </div>
+  
+  
+</ion-content>
+
+
+

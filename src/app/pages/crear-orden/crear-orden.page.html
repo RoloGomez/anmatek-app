@@ -1,0 +1,143 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon slot="start" name="chevron-back-outline" (click)="clear()"></ion-icon>
+    <ion-title>Crear Orden</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <ion-list>
+    <ion-list-header>N° Orden {{idOrden}} <ion-datetime-button datetime="fecha"><ion-datetime id="fecha" readonly="true" presentation="date" value=""></ion-datetime></ion-datetime-button></ion-list-header>
+
+    <ion-accordion-group #accordionGroup>
+<!--      Espacio para cliente      -->
+      <ion-accordion value="cliente">
+        <ion-item slot="header">
+          <ion-label>Cliente</ion-label>
+        </ion-item>
+
+        <div slot="content">
+<!-- Crear Cliente -->
+          <div class="ion-padding">
+            <div>
+              <ion-button id="open-find-cliente" expand="block" color="success" fill="outline">Buscar Cliente</ion-button>
+            </div>
+
+            <ion-list>
+              <ion-item>
+                <ion-label position="floating">Rut</ion-label>
+                <ion-input placeholder="rut de cliente..." [(ngModel)]="cliente.rut"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Nombre</ion-label>
+                <ion-input placeholder="Ingrese Nombre..." [(ngModel)]="cliente.nombre"></ion-input>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating">telefono</ion-label>
+                <ion-input type="tel" placeholder="ejemplo: 9123 4567" [(ngModel)]="cliente.telefono"></ion-input>
+              </ion-item>
+
+              <ion-item class="ion-valid">
+                <ion-label position="floating">correo</ion-label>
+                <ion-input type="email" placeholder="ejemplo: correo@gmail.com" ngModel email [(ngModel)]="cliente.correo"></ion-input>
+                <ion-note slot="helper">Introduzca un correo valido</ion-note>
+                <ion-note slot="error">Correo invalido</ion-note>
+              </ion-item>
+
+            </ion-list>
+          </div>
+        </div>
+      </ion-accordion>
+<!--      Espacio para Equipo     -->
+      <ion-accordion value="equipo">
+        <ion-item slot="header">
+          <ion-label>Equipo</ion-label>
+        </ion-item>
+
+        <!-- Datos Equipo -->
+        <div slot="content">
+          <div class="ion-padding">
+            <ion-list>
+              <ion-item>
+                <ion-label position="floating">Numero de Serie</ion-label>
+                <ion-input placeholder="Numero del equipo" [(ngModel)]="equipo.nserie"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Marca</ion-label>
+                <ion-input placeholder="Ingrese Marca..." [(ngModel)]="equipo.marca"></ion-input>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating">Modelo</ion-label>
+                <ion-input placeholder="Modelo del Equipo." [(ngModel)]="equipo.modelo"></ion-input>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+        
+      </ion-accordion>
+<!--      Espacio para diagnostico      -->
+      <ion-accordion value="diagnostico">
+        <ion-item slot="header">
+          <ion-label>Diagnostico inicial</ion-label>
+        </ion-item>
+
+        <div slot="content">
+          <ion-item>
+            <ion-label position="floating">Descripción del problema</ion-label>
+            <ion-textarea placeholder="Escribir Diagnostico inicial" [autoGrow]="true" [(ngModel)]="diagnostico"></ion-textarea>
+          </ion-item>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-list>
+  
+<!--      Botones     -->
+  <div>
+    <div class="buttons">
+      <ion-button class="add-circle" (click)="createOrden()" [disabled]="!(cliente.rut!='' && equipo.nserie!='' && diagnostico!='')">
+        <ion-icon slot="icon-only"  name="checkmark-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button class="add-circle" color="danger" (click)="clear()">
+        <ion-icon slot="icon-only"  name="close-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <!--MODAL PARA BUSCAR CLIENTE-->
+  <ion-modal #modalusuario id="crear_usuario" trigger="open-find-cliente">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Buscar Cliente</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content [fullscreen]="true" scrollY="false">
+        <ion-list class="margin-10x">
+          <ion-searchbar [(ngModel)]="rutFiltro" placeholder="rut cliente"></ion-searchbar>
+          <ion-list *ngFor="let client of clientes; let i = index">
+            <ion-card class="margin-0 border-bottom" button="true" (click)="cargarDatos(i)" [hidden]="!client.rut.includes(rutFiltro)">
+            <ion-grid>
+              <ion-row>
+                <ion-col>{{client.rut}}</ion-col>
+                <ion-col>{{client.nombre}}</ion-col>
+              </ion-row>
+            </ion-grid>
+            </ion-card>
+          </ion-list>
+        </ion-list>
+        
+        <div class="buttons">
+          <ion-button (click)="modalusuario.dismiss()" expand="block" color="success" fill="outline">Cancelar</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

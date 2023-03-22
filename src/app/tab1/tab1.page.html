@@ -1,0 +1,100 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Lista de Ordenes
+    </ion-title>
+    <ion-button slot="end" (click)="limpiarFiltros()" color="success" fill="outline">Limpiar Filtros</ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scrollY="false">
+
+  <div class="order_options margin-10x grid-3col">
+
+    <ion-card class="ion-text-center flex margin-0" [ngStyle]="{'background':SAColor}" button="true" (click)="filtrar('sin asignar')" *ngIf="rol=='admin'">
+      <ion-card-header>
+        <ion-card-title>{{espera}}</ion-card-title>
+        <ion-card-subtitle class="black-and-white">Sin Asignar</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card class="ion-text-center flex margin-0" [ngStyle]="{'background':PColor}" button="true" (click)="filtrar('en pausa')" *ngIf="rol=='tecnico'">
+      <ion-card-header>
+        <ion-card-title>{{pausadas}}</ion-card-title>
+        <ion-card-subtitle class="black-and-white">Pausadas</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card class="ion-text-center flex margin-0" button="true" [ngStyle]="{'background':AColor}" (click)="filtrar('asignada')">
+      <ion-card-header>
+        <ion-card-title>{{trabajando}}</ion-card-title>
+        <ion-card-subtitle class="black-and-white">Asignadas</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card class="ion-text-center flex margin-0" button="true" [ngStyle]="{'background':RColor}" (click)="filtrar('retiro')">
+      <ion-card-header>
+        <ion-card-title>{{retiro}}</ion-card-title>
+        <ion-card-subtitle class="black-and-white">Retiro</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+  </div>
+
+  <div class="order-container margin-10x  border-bottom">
+
+    <div class="flex">
+      <ion-searchbar placeholder="rut cliente o nombre tecnico" animated="true" show-clear-button="focus" [(ngModel)]="filtro" mask="00.000.000-0"></ion-searchbar>
+
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+    </div>
+
+    <ion-content class="ordenes">
+      <ion-progress-bar type="indeterminate" *ngIf="progreso==true"></ion-progress-bar>
+      <ion-list *ngFor="let orden of ordenes.reverse(); let i = index">
+        <ion-card class="margin-0 border-bottom" button="true" id="open-read-order" (click)="getOrder(orden.idField, orden.rutCliente, orden.idEquipo, orden.rutTecnico)"
+        *ngIf="orden.rutCliente.includes(filtro, 0) || orden.tecnico.includes(filtro, 0)">
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>{{orden.equipo}}</ion-card-title>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col><ion-card-subtitle>Estado: {{orden.estado}}</ion-card-subtitle></ion-col>
+            <ion-col><ion-card-subtitle>ID orden: {{orden.idField}}</ion-card-subtitle></ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-label>Cliente: {{orden.cliente}}</ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+      </ion-list>
+
+    </ion-content>
+  </div>
+
+  <div class="add-button margin-10px">
+    <ion-button class="add-circle" (click)="createOrden()">
+      <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+    </ion-button>
+    <ion-button class="add-circle" (click)="leerQR()">
+      <ion-icon slot="icon-only" name="qr-code-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <!-- MODAL PARA FECHA -->
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime" presentation="month-year" [showDefaultButtons]="true" 
+      doneText="Confirmar"
+      cancelText="Cancelar" [(ngModel)]="fecha" (ionChange)="cambiarFecha()"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

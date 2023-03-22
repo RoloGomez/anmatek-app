@@ -1,0 +1,7 @@
+{
+  "name": "anmatek",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

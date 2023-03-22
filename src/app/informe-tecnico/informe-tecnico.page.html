@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>informe tecnico</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="cargarPDF()"><ion-icon name="print-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Pulse el icono '<ion-icon name="print-outline"></ion-icon>'' para generar un PDF.</ion-label>
+  </ion-item>
+  <div>
+    <h2>Tecnicos activos</h2>
+    <h4 class="padding-h10">Información de los técnicos activos en el local a fecha del {{fechaString}}</h4>
+    <ion-card class="ion-no-margin ion-no-padding" *ngFor="let tecnico of tecnicos; let i = index">
+      <ion-card-header>
+        <ion-card-title>{{tecnico.nombre}}</ion-card-title>
+        <ion-card-subtitle>Ordenes asignadas: {{ordenAsignada[i]}} <br>
+          Ordenes completadas: {{ordenCompletada[i]}}</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </div>
+  <div class="buttons">
+    <ion-button class="add-circle" (click)="clear()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+  </div>
+</ion-content>

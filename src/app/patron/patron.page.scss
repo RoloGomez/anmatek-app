@@ -1,0 +1,16 @@
+.grid-3col{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+ion-button{
+    --background: rgba(0, 0, 0, 0.3) !important;
+}
+.borrar{
+    --background: #0a6e0f !important;
+}
+.div-flex {
+    padding: 20px 60px;
+}
+.div-flex ion-button {
+    margin-bottom: 30px;
+}

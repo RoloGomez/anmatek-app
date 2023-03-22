@@ -1,0 +1,303 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-title>
+      Información orden
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="success" id="open-notas"><ion-icon name="document-outline"></ion-icon></ion-button>
+      <ion-button color="success" (click)="cargarPDF()"><ion-icon name="print-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngFor="let i of orden">
+<!--Numero de orden y fecha emision-->
+    <ion-card class="ion-no-margin">
+      <ion-card-header class="ion-justify-content-between">
+        <ion-card-title>{{i.cliente}} {{i.emision}}</ion-card-title>
+        <ion-card-subtitle>
+          Equipo: {{i.equipo}} <br>
+          Estado de Orden: {{i.estado}}
+        </ion-card-subtitle>
+        <ion-card-title>$ {{i.valor}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-title>Informacion de la Orden:</ion-title>
+      </ion-card-content>
+    </ion-card>
+    <ion-accordion-group>
+<!--Datos del cliente-->
+      <ion-accordion >
+        <ion-item slot="header">
+          <ion-label>Cliente: {{i.cliente}}</ion-label>
+        </ion-item>
+
+        <div slot="content" *ngFor="let cli of cliente | async">
+          <ion-card class="margin-0 border-bottom">
+            <ion-card-header>
+              <ion-card-title>{{cli.nombre}}</ion-card-title>
+              <ion-card-subtitle>Rut: {{cli.rut}}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              {{cli.telefono}}<br>
+              {{cli.correo}}
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-accordion>
+<!--Datos del equipo-->
+      <ion-accordion>
+        <ion-item slot="header">
+          <ion-label>Equipo: {{i.equipo}}</ion-label>
+        </ion-item>
+
+        <div slot="content" *ngFor="let e of equipo | async">
+            <ion-card class="margin-0 border-bottom">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-card-title>{{e.marca}} {{e.modelo}}</ion-card-title>
+                    <ion-card-subtitle>{{e.nserie}}</ion-card-subtitle>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <!--Esta oculto el bloqueo hasta terminarlo-->
+              <div class="ion-padding" *ngIf="e.patron!='' || e.clave!=''" [hidden]="true">
+                <ion-button expand="block"><ion-icon slot="start" name="lock-closed"></ion-icon>Metodo de Desbloqueo</ion-button>
+                <ion-label>{{e.patron}} {{e.clave}}</ion-label>
+              </div>
+            </ion-card>
+        </div>
+      </ion-accordion>
+<!--Datos del tecnico-->
+      <ion-accordion [hidden]="rutTecnico=='vacio'">
+        <ion-item slot="header">
+          <ion-label>Tecnico: {{i.tecnico}}</ion-label>
+        </ion-item>
+
+        <div slot="content">
+          <div>
+            <ion-card class="margin-0 border-bottom" *ngFor="let tec of tecnico | async">
+              <ion-card-header>
+                <ion-card-title>{{tec.nombre}}</ion-card-title>
+                <ion-card-subtitle>{{tec.rut}}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <h2>Informacion de contacto:</h2><br>
+                +569 {{tec.numero}}<br>
+                {{tec.correo}}
+              </ion-card-content>
+              
+            </ion-card>
+          </div>
+        </div>
+      </ion-accordion>
+<!--Datos del diagnostico-->
+      <ion-accordion>
+        <ion-item slot="header">
+          <ion-label>Diagnostico Inicial</ion-label>
+        </ion-item>
+
+        <div slot="content">
+          <ion-card class="ion-no-margin">
+            <ion-card-content>
+              <ion-label>{{i.diagnostico}}</ion-label>
+            </ion-card-content>
+          </ion-card>
+          
+        </div>
+      </ion-accordion>
+<!--    Servicios asignados   -->
+      <ion-accordion [hidden]="rutTecnico=='vacio'">
+        <ion-item slot="header">
+          <ion-label>Servicios asignados</ion-label>
+        </ion-item>
+
+        <div slot="content">
+          <ion-card class="ion-no-margin">
+            <ion-card-content [hidden]="i.servicios != ''">
+              <ion-label>No posee servicios asignados. <br>Para asignar un servicio presione la opción de abajo.</ion-label>
+            </ion-card-content>
+
+            <ion-card-header [hidden]="i.servicios ==''" *ngFor="let s of servicios">
+              <ion-card-subtitle>${{s}}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-accordion>
+<!--      Asignar tecnico     -->
+      <ion-accordion [hidden]="i.rutTecnico!='vacio'">
+        <ion-item slot="header" color="tertiary">
+          <ion-label><ion-icon name="construct-outline"></ion-icon> Asignar Tecnico</ion-label>
+        </ion-item>
+        <div slot="content">
+          <ion-item style="width: 100%;">
+            <ion-select [interfaceOptions]="customOptions" interface="action-sheet" placeholder="Tecnicos Disponibles" (ionChange)="agregarTecnico($event)" style="width: 100%;">
+              <ion-select-option *ngFor="let tecnicos of tecnico | async"
+              value="{{tecnicos.rut}},{{tecnicos.nombre}}">{{tecnicos.nombre}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </ion-accordion>
+<!--      Agregar servicios    -->
+      <ion-accordion [hidden]="rutTecnico=='vacio'">
+        <ion-item slot="header" color="tertiary">
+          <ion-label><ion-icon name="construct-outline"></ion-icon> Asignar servicios</ion-label>
+        </ion-item>
+
+        <div slot="content" class="lista-servicios">
+          <ion-list>
+            <ion-list-header>Telefonia</ion-list-header>
+            <div *ngFor="let s1 of telefoniaService">
+              <ion-card class="ion-no-margin" (click)="agregarServicio(s1.idField, s1.nombre, s1.valor)">
+                <ion-card-header>
+                  <ion-card-subtitle><ion-icon name="add-circle-outline" color="success"></ion-icon> {{s1.nombre}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-card>
+            </div>
+
+            <ion-list-header>Computacion</ion-list-header>
+            <div *ngFor="let s2 of computacionService">
+              <ion-card class="ion-no-margin" (click)="agregarServicio(s2.idField, s2.nombre, s2.valor)">
+                <ion-card-header>
+                  <ion-card-subtitle><ion-icon name="add-circle-outline" color="success"></ion-icon> {{s2.nombre}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-card>
+            </div>
+          </ion-list>
+        </div>
+      </ion-accordion>
+<!--      Eliminar orden     -->
+      <ion-accordion>
+        <ion-item slot="header" color="tertiary">
+          <ion-label><ion-icon name="construct-outline"></ion-icon> Eliminar orden</ion-label>
+        </ion-item>
+
+        <div slot="content">
+          <ion-card>
+            <ion-card-header>
+              <ion-button expand="block" color="danger" (click)="eliminar()">
+                <ion-icon name="trash"></ion-icon>
+                Eliminar orden
+              </ion-button>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+<!--      QR CODE     -->
+    <ion-card class="ion-text-center">
+      <ion-card-header>
+        <ion-card-title>Codigo QR</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="ion-margin-bottom">
+        <div class="ion-margin-bottom">
+          <qrcode id='codigo-qr' 
+            [qrdata]="qrString"
+            [width]="256"
+            [errorCorrectionLevel]="'M'">
+          </qrcode>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+<!--agregar notas-->
+    <div class="buttons">
+      <ion-button class="add-circle pause" expand="block" [hidden]="!(i.estado=='asignada')" (click)="pausar('en pausa')"><ion-icon name="pause-outline"></ion-icon></ion-button>
+      <ion-button class="add-circle" expand="block" [hidden]="!(i.estado=='en pausa')" (click)="pausar('asignada')"><ion-icon name="play"></ion-icon></ion-button>
+
+      <div *ngIf="i.estado=='asignada'">
+        <ion-button class="square-button" color="tertiary" (click)="completarOrden('sin asignar')">Reasignar</ion-button>
+        <ion-button class="square-button" color="secondary" (click)="completarOrden('retiro')">Retiro</ion-button>
+      </div>
+
+      <div *ngIf="i.estado=='retiro'">
+        <ion-button class="square-button" color="tertiary" (click)="completarOrden('asignada')">Reingresar</ion-button>
+        <ion-button class="square-button" color="success" (click)="completarOrden('completada')">Completar</ion-button>
+      </div>
+
+      <div *ngIf="i.estado=='completada'">
+        <ion-button class="square-button" color="warning" (click)="completarOrden('retiro')">Retiro</ion-button>
+      </div>
+      
+      <ion-button class="add-circle" (click)="clear()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+    </div>
+  </div>
+
+<!--      MODAL PARA NOTAS      -->
+<ion-modal #modalnotas id="notas-orden" trigger="open-notas">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Anotaciones</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" scrollY="false">
+<!--CREAR NUEVA NOTA-->
+      <div *ngIf="!notaStatus" class="nota-card">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Crear nueva nota.
+              <br><br>
+              Técnico: {{tecnicoLog}}
+              <br>
+              Fecha: {{fechaActual}}
+            </ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            
+              <ion-label>Contenido</ion-label>
+              <ion-textarea class="custom-textarea" placeholder=" [Pulse para agregar Contenido a la nota]" [autoGrow]="true" [(ngModel)]="contenidoNota"></ion-textarea>
+            
+          </ion-card-content>
+        </ion-card>
+      </div>
+<!--MOSTAR ARRAY DE NOTAS-->
+      <div *ngIf="notaStatus">
+        <ion-searchbar [(ngModel)]="filtroNota" placeholder="no se para que usar el filtro"></ion-searchbar>
+    <!--Hay notas-->
+        <div *ngIf="!emptyNotes">
+          <ion-card class="ion-no-margin" *ngFor="let i of notas">
+            <ion-card-header>
+              <ion-card-title>
+                {{i[0]}}
+                <br>
+                {{i[1]}}
+              </ion-card-title>
+
+              <ion-card-subtitle>{{i[2]}}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      <!--No hay notas-->
+        <div *ngIf="emptyNotes">
+          <ion-card class="ion-no-margin">
+            <ion-card-header>
+              <ion-card-title>No hay notas</ion-card-title>
+              <ion-card-subtitle></ion-card-subtitle>
+            </ion-card-header>
+            
+            <ion-card-content>
+              Para agregar una nota presione 'Agregar nueva nota'.
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+
+      <div class="add-button">
+        <ion-button class="square-button" (click)="modalnotas.dismiss()" color="danger">Cerrar</ion-button>
+        <ion-button class="square-button" *ngIf="!notaStatus" (click)="cambiarNota(1)">Agregar Nueva Nota</ion-button>
+        <ion-button class="square-button" *ngIf="!notaStatus" (click)="cambiarNota(0)"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+        <ion-button class="square-button" *ngIf="notaStatus" (click)="cambiarNota(0)">Crear Nota</ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+</ion-content>

@@ -1,0 +1,36 @@
+.buttons{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 5px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+.pause{
+    --background: #ffd948 !important;
+}
+ion-textarea.custom-textarea {
+    border: 1px solid silver;
+    height: 200px;
+}
+.nota-card{
+    display: grid;
+    align-content: center;
+    height: 85%;
+}
+.lista-servicios{
+    max-height: 550px;
+    overflow-y: auto;
+}
+//Accordeon
+ion-accordion.accordion-collapsing ion-item[slot="header"],
+ion-accordion.accordion-collapsed ion-item[slot="header"] {
+    --background: var(--ion-color-light) !important; 
+    --color: var(--ion-color-light-contrast) !important;
+}
+
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"] {
+    --background: #0a6e0f !important;
+    --color: white !important;
+}

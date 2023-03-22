@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>informe atenciones</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="cargarPDF()"><ion-icon name="print-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Pulse el icono '<ion-icon name="print-outline"></ion-icon>'' para generar un PDF.</ion-label>
+  </ion-item>
+  <div id="content2">
+    <h2>Atenciones Realizadas</h2>
+    <h4 class="padding-h10">Atenciones realizadas en el local a la fecha de {{fechaString}}</h4>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="texto-negro centrar-texto">Pausadas <br> {{pausa}}</ion-col>
+        <ion-col class="texto-negro centrar-texto">Asignadas <br> {{asignada}}</ion-col>
+        <ion-col class="texto-negro centrar-texto">Para retiro <br> {{retiro}}</ion-col>
+        <ion-col class="texto-negro centrar-texto">Completadas <br> {{completada}}</ion-col>
+      </ion-row>
+    </ion-grid>
+    <h4 class="padding-h10">Lista detallada de ordenes</h4>
+    <ion-list class="ion-no-margin ion-no-padding" *ngFor="let orden of ordenes">
+      <div style="background-color:white; color:black; border-bottom: 1px solid silver;">
+        <ion-list-header>{{orden.emision}} {{orden.cliente}}</ion-list-header>
+        <ion-label class="ion-padding">{{orden.id}} Estado: {{orden.estado}}</ion-label>
+      </div>
+    </ion-list>
+  </div>
+  <div class="buttons">
+    <ion-button class="add-circle" (click)="clear()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+  </div>
+</ion-content>
